@@ -9,6 +9,7 @@ import (
 
 var wg sync.WaitGroup
 
+// Antrian is model for antrian
 type Antrian struct {
 	Slot    int
 	queue   []int
