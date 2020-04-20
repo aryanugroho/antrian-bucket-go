@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/aryanugroho/antrian-bucket-go/pkg/antrian"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -21,11 +22,18 @@ func main() {
 	inputs := strings.Split(strings.Trim(input, "\n"), " ")
 
 	// validate slot should be between 1 - 5
-	isValid := antrian.Validate(inputs[0])
+	arg := inputs[0]
+	isValid := antrian.Validate(arg)
 	if !isValid {
 		fmt.Printf("number of slot should be 1 - 5")
 		return
 	}
 
-	fmt.Println(inputs)
+	// init antrian
+	dummyQueueProcess := []int{1, 2, 4, 2, 3, 5, 2, 3, 1, 3}
+	slot, _ := strconv.Atoi(arg)
+	antrian := antrian.Antrian{Slot: slot}
+	antrian.Start(dummyQueueProcess)
+
+	antrian.Close()
 }
