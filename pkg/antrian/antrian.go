@@ -10,13 +10,17 @@ import (
 var wg sync.WaitGroup
 
 type Antrian struct {
-	Slot  int
-	queue []int
+	Slot    int
+	queue   []int
+	stopped bool
 }
 
 func (a *Antrian) Start(process []int) {
 	processed := 0
 	for processed < len(process) {
+		if a.stopped {
+			break
+		}
 		//4fmt.Println(processed, a.queue)
 		if len(a.queue) < a.Slot {
 			wg.Add(1)
@@ -25,6 +29,7 @@ func (a *Antrian) Start(process []int) {
 			processed++
 		}
 	}
+	wg.Wait()
 }
 
 func (a *Antrian) serve(howLong int) {
@@ -43,6 +48,7 @@ func (a *Antrian) serve(howLong int) {
 }
 
 func (a *Antrian) Close() {
+	a.stopped = true
 	fmt.Println("waiting existing process")
 	wg.Wait()
 }
