@@ -17,7 +17,7 @@ type Antrian struct {
 func (a *Antrian) Start(process []int) {
 	processed := 0
 	for processed < len(process) {
-		fmt.Println(processed, a.queue)
+		//4fmt.Println(processed, a.queue)
 		if len(a.queue) < a.Slot {
 			wg.Add(1)
 			a.queue = append(a.queue, 1)

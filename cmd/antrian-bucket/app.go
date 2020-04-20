@@ -5,8 +5,10 @@ import (
 	"fmt"
 	"github.com/aryanugroho/antrian-bucket-go/pkg/antrian"
 	"os"
+	"os/signal"
 	"strconv"
 	"strings"
+	"syscall"
 )
 
 func main() {
@@ -33,7 +35,16 @@ func main() {
 	dummyQueueProcess := []int{1, 2, 4, 2, 3, 5, 2, 3, 1, 3}
 	slot, _ := strconv.Atoi(arg)
 	antrian := antrian.Antrian{Slot: slot}
-	antrian.Start(dummyQueueProcess)
 
-	antrian.Close()
+	// termination handler
+	term := make(chan os.Signal)
+	signal.Notify(term, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		<-term
+		fmt.Println("terminating app")
+		antrian.Close()
+	}()
+
+	// start the process
+	antrian.Start(dummyQueueProcess)
 }
