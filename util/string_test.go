@@ -22,8 +22,8 @@ func TestIsPositiveNumber(t *testing.T) {
 	}
 
 	for i, v := range tests {
-		isPositif := IsPositiveNumber(v.param)
-		if isPositif != v.expected {
+		isPositive, _ := IsPositiveNumber(v.param)
+		if isPositive != v.expected {
 			t.Errorf("fail when validated test cases on case no %d", i+1)
 		}
 	}
